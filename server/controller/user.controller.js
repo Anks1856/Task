@@ -1,5 +1,8 @@
 const db = require('../models');
 const bcrypt = require('bcrypt');
+const createToken = require('../utility/auth.utils.js');
+
+// console.log(createToken);
 
 const signUp = async (req, res) => {
     try {
@@ -56,11 +59,14 @@ const login = async (req, res) => {
                 });
                 }
                 else {
+                    const payload = {
+                        username : hasUser.email,
+                    }
+                    const token = createToken(payload);
                     res.status(200).send({
                         message : 'Login success!',
                         data : {
-                            validUser : true,
-                            email : req.body.email
+                            token : token,
                         },
                         success : true
                      } )
